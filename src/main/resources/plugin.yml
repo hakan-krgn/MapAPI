@@ -1,0 +1,5 @@
+name: 'MapAPI'
+author: 'Hakan Kargın'
+version: 3.0.0
+api-version: 1.13
+main: com.hakan.mapapi.Main
