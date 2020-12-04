@@ -15,7 +15,11 @@ public class MapText {
     }
 
     public MapText(int x, int y, boolean centered, String text, Color color) {
-        setX(x);
+        if (!centered) {
+            setX(x);
+        } else {
+            setX(0);
+        }
         setY(y);
         setCentered(centered);
         setText(text);
@@ -23,7 +27,11 @@ public class MapText {
     }
 
     public MapText(int x, int y, boolean centered, String text, int r, int g, int b) {
-        setX(x);
+        if (!centered) {
+            setX(x);
+        } else {
+            setX(0);
+        }
         setY(y);
         setCentered(centered);
         setText(text);
@@ -44,6 +52,9 @@ public class MapText {
 
     public void setCentered(boolean centered) {
         this.centered = centered;
+        if (centered) {
+            setX(0);
+        }
     }
 
     public Color getColor() {
@@ -59,7 +70,9 @@ public class MapText {
     }
 
     public void setX(int x) {
-        this.x = x;
+        if (!this.centered) {
+            this.x = x;
+        }
     }
 
     public int getY() {
@@ -67,6 +80,8 @@ public class MapText {
     }
 
     public void setY(int y) {
-        this.y = y;
+        if (!this.centered) {
+            this.y = y;
+        }
     }
 }

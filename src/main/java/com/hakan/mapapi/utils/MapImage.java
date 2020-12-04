@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 public class MapImage {
 
     private BufferedImage bufferedImage;
-    private int x;
-    private int y;
-    private boolean fullSized;
+    private int x = 0;
+    private int y = 0;
+    private boolean fullSized = false;
 
     public MapImage() {
 
@@ -38,7 +38,9 @@ public class MapImage {
     }
 
     public void setX(int x) {
-        this.x = x;
+        if (!this.fullSized) {
+            this.x = x;
+        }
     }
 
     public int getY() {
@@ -46,7 +48,9 @@ public class MapImage {
     }
 
     public void setY(int y) {
-        this.y = y;
+        if (!this.fullSized) {
+            this.y = y;
+        }
     }
 
     public boolean isFullSized() {
@@ -55,5 +59,9 @@ public class MapImage {
 
     public void setFullSized(boolean fullSized) {
         this.fullSized = fullSized;
+        if (fullSized) {
+            setX(0);
+            setY(0);
+        }
     }
 }
