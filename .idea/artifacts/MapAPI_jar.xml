@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="MapAPI:jar">
+    <output-path>$PROJECT_DIR$/../../..</output-path>
+    <root id="archive" name="MapAPI.jar">
+      <element id="module-output" name="MapAPI" />
+    </root>
+  </artifact>
+</component>
