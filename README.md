@@ -17,4 +17,5 @@ HMap hMap = mapManager.create();
 hMap.open(Bukkit.getPlayer("blueybighats"), 0);
 ```
 
-<link:https://user-images.githubusercontent.com/42969966/101343036-74279b00-3894-11eb-8d5a-e6b3442990c6.PNG>
+
+![Ekran Alıntısı](https://user-images.githubusercontent.com/42969966/101343036-74279b00-3894-11eb-8d5a-e6b3442990c6.PNG)
