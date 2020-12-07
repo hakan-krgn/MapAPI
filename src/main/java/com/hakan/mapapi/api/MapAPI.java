@@ -64,22 +64,42 @@ public class MapAPI {
         }
 
         public MapManager addText(String text, Color color, int x, int y) {
-            addText(new MapText(x, y, false, text, color));
+            addText(new MapText(x, y, false, text, color, null));
             return this;
         }
 
         public MapManager addText(String text, Color color, boolean centeredX, int y) {
-            addText(new MapText(0, y, centeredX, text, color));
+            addText(new MapText(0, y, centeredX, text, color, null));
             return this;
         }
 
         public MapManager addText(String text, int r, int g, int b, int x, int y) {
-            addText(new MapText(x, y, false, text, r, g, b));
+            addText(new MapText(x, y, false, text, new Color(r, g, b), null));
             return this;
         }
 
         public MapManager addText(String text, int r, int g, int b, boolean centeredX, int y) {
-            addText(new MapText(0, y, centeredX, text, r, g, b));
+            addText(new MapText(0, y, centeredX, text, new Color(r, g, b), null));
+            return this;
+        }
+
+        public MapManager addText(String text, Color color, boolean centeredX, int y, Font font) {
+            addText(new MapText(0, y, centeredX, text, color, font));
+            return this;
+        }
+
+        public MapManager addText(String text, Color color, int x, int y, Font font) {
+            addText(new MapText(x, y, false, text, color, font));
+            return this;
+        }
+
+        public MapManager addText(String text, int r, int g, int b, boolean centeredX, int y, Font font) {
+            addText(new MapText(0, y, centeredX, text, new Color(r, g, b), font));
+            return this;
+        }
+
+        public MapManager addText(String text, int r, int g, int b, int x, int y, Font font) {
+            addText(new MapText(x, y, false, text, new Color(r, g, b), font));
             return this;
         }
 

@@ -7,7 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.map.*;
+import org.bukkit.map.MapPalette;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -102,70 +104,32 @@ public class HMap {
     }
 
     private byte[] getTotalBytes(List<MapImage> mapImageList, List<MapText> mapTextList) {
-        byte[] imageBytes = getImageBytes(mapImageList);
-        byte[] textBytes = getTextBytes(mapTextList);
-        if (textBytes.length > 0) {
-            int m = 0;
-            for (byte textbyte : textBytes) {
-                if (textbyte != 0) {
-                    imageBytes[m] = textBytes[m];
-                }
-                m++;
+        BufferedImage bufferedImage = new BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphics2D = bufferedImage.createGraphics();
+        if (mapImageList.size() != 0) {
+            for (MapImage mapImage : new ArrayList<>(mapImageList)) {
+                BufferedImage mainImage = mapImage.getBufferedImage();
+                BufferedImage resizedImage = mapImage.isFullSized() ? MapPalette.resizeImage(mainImage.getScaledInstance(128, 128, Image.SCALE_DEFAULT)) : mainImage;
+                graphics2D.drawImage(resizedImage, null, mapImage.getX(), mapImage.getY());
             }
         }
-        return imageBytes;
-    }
-
-    private byte[] getImageBytes(List<MapImage> mapImageList) {
-        if (mapImageList.size() == 0) {
-            return new byte[0];
-        }
-        byte[] bytesCanvas = new byte[16384];
-        for (MapImage mapImage : new ArrayList<>(mapImageList)) {
-            BufferedImage mainImage = mapImage.getBufferedImage();
-            BufferedImage bufferedImage = mapImage.isFullSized() ? MapPalette.resizeImage(mainImage.getScaledInstance(128, 128, Image.SCALE_DEFAULT)) : mainImage;
-            byte[] bytes = MapPalette.imageToBytes(bufferedImage);
-            for (int x2 = mapImage.getX(); x2 < bufferedImage.getWidth() + mapImage.getX(); ++x2) {
-                for (int y2 = mapImage.getY(); y2 < bufferedImage.getHeight() + mapImage.getY(); ++y2) {
-                    bytesCanvas[y2 * 128 + x2] = bytes[(y2 - mapImage.getY()) * bufferedImage.getWidth() + x2 - mapImage.getX()];
-                }
+        if (mapTextList.size() != 0) {
+            for (MapText mapText : new ArrayList<>(mapTextList)) {
+                String text = mapText.getText();
+                Font font = mapText.getFont();
+                graphics2D.setFont(font);
+                graphics2D.setColor(mapText.getColor());
+                int x = mapText.isCentered() ? (int) (64 - (graphics2D.getFontMetrics().stringWidth(text) / 2.0)) : mapText.getX();
+                int y = mapText.getY();
+                graphics2D.drawString(text, x, y);
             }
         }
-        return bytesCanvas;
-    }
-
-    private byte[] getTextBytes(List<MapText> mapTextList) {
-        if (mapTextList.size() == 0) {
-            return new byte[0];
-        }
-        MapFont mapFont = MinecraftFont.Font;
+        graphics2D.dispose();
         byte[] bytesCanvas = new byte[16384];
-        for (MapText mapText : new ArrayList<>(mapTextList)) {
-            String text = mapText.getText();
-            int x = mapText.isCentered() ? 64 - (mapFont.getWidth(text) / 2) : mapText.getX();
-            int y = mapText.getY();
-            byte color = MapPalette.matchColor(mapText.getColor());
-            for (int i = 0; i < text.length(); ++i) {
-                char ch = text.charAt(i);
-                if (ch == '\u00A7') {
-                    int j = text.indexOf(';', i);
-                    if (j >= 0) {
-                        color = Byte.parseByte(text.substring(i + 1, j));
-                        i = j;
-                        continue;
-                    }
-                }
-                MapFont.CharacterSprite sprite = mapFont.getChar(text.charAt(i));
-                for (int r = 0; r < mapFont.getHeight(); ++r) {
-                    for (int c = 0; c < sprite.getWidth(); ++c) {
-                        if (sprite.get(r, c)) {
-                            int i1 = (y + r) * 128 + x + c;
-                            if (!sprite.get(r, c)) bytesCanvas[i1] = 0;
-                            else bytesCanvas[i1] = color;
-                        }
-                    }
-                }
-                x += sprite.getWidth() + 1;
+        byte[] bytes = MapPalette.imageToBytes(bufferedImage);
+        for (int x2 = 0; x2 < bufferedImage.getWidth(); x2++) {
+            for (int y2 = 0; y2 < bufferedImage.getHeight(); y2++) {
+                bytesCanvas[y2 * 128 + x2] = bytes[y2 * bufferedImage.getWidth() + x2];
             }
         }
         return bytesCanvas;

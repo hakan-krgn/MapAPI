@@ -9,12 +9,13 @@ public class MapText {
     private boolean centered = false;
     private String text = "";
     private Color color = Color.BLACK;
+    private Font font = new Font("Default", Font.PLAIN, 10);
 
     public MapText() {
 
     }
 
-    public MapText(int x, int y, boolean centered, String text, Color color) {
+    public MapText(int x, int y, boolean centered, String text, Color color, Font font) {
         if (!centered) {
             setX(x);
         } else {
@@ -24,18 +25,9 @@ public class MapText {
         setCentered(centered);
         setText(text);
         setColor(color);
-    }
-
-    public MapText(int x, int y, boolean centered, String text, int r, int g, int b) {
-        if (!centered) {
-            setX(x);
-        } else {
-            setX(0);
+        if (font != null) {
+            setFont(font);
         }
-        setY(y);
-        setCentered(centered);
-        setText(text);
-        setColor(new Color(r, g, b));
     }
 
     public String getText() {
@@ -83,5 +75,13 @@ public class MapText {
         if (!this.centered) {
             this.y = y;
         }
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
     }
 }
